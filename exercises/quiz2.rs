@@ -27,6 +27,8 @@ pub enum Command {
 }
 
 mod my_module {
+    use std::collections::HashMap;
+
     use super::Command;
 
     // TODO: Complete the function signature!
@@ -42,10 +44,35 @@ mod my_module {
                     let mut from: String = String::from(*string);
                     from.push_str(&repeat);
                     from
-                },
+                }
             });
         }
         output
+    }
+
+    pub fn count_characters(words: Vec<String>, chars: String) -> i32 {
+        let mut fm: HashMap<char, i8> = HashMap::new();
+        let mut ans: i32 = 0;
+        for c in chars.chars() {
+            let mut count = fm.entry(c).or_insert(0);
+            *count += 1;
+        }
+        for word in words {
+            let mut cfm = fm.clone();
+            let mut should_add = true;
+            for wc in word.chars() {
+                let count = cfm.entry(wc).or_insert(0);
+                if *count == 0 {
+                    should_add = false;
+                    break;
+                }
+                *count -= 1;
+            }
+            if should_add {
+                ans += word.len() as i32;
+            }
+        }
+        return ans;
     }
 }
 
